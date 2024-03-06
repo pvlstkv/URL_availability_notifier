@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/rule/create
+Content-Type: application/json
+
+{
+  "url": "https://ya.ru/",
+  "periodInSeconds": 10,
+  "expectedStatusCode": 200
+}
+
