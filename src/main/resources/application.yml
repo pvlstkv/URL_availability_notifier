@@ -4,6 +4,8 @@ spring:
     username: login
     password: password
     driverClassName: org.h2.Driver
+    generate-unique-name: false
+    name: myh2db
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
   h2:

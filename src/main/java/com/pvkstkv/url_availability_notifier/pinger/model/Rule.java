@@ -20,9 +20,10 @@ public class Rule {
     private short expectedStatusCode;
     private boolean isEnabled = true;
 
-    public Rule(String url, long periodInSeconds, short expectedStatusCode) {
+    public Rule(String url, long periodInSeconds, short expectedStatusCode, boolean isEnabled) {
         this.url = url;
         this.periodInSeconds = periodInSeconds;
         this.expectedStatusCode = expectedStatusCode;
+        this.isEnabled = isEnabled;
     }
 }
