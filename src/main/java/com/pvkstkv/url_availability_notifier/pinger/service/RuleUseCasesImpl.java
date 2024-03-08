@@ -11,79 +11,67 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class RuleUseCasesImpl implements RuleUseCases {
+
     private RuleRepository repository;
     private RuleMapper mapper;
 
     @Transactional
     @Override
-    public Rule createRule(Rule rule) throws RuleYetExistsException {
-        Optional<Rule> existRule = repository.findByUrl(rule.getUrl());
-        if (existRule.isPresent()) {
-            throw new RuleYetExistsException(String.format("Правило с url = %s уже существует", rule.getUrl()));
-        }
-        return repository.save(rule);
-    }
-
-    @Transactional
-    @Override
     public RuleDTO createRule(RuleDTO ruleDto) throws RuleYetExistsException {
-        Rule rule = mapper.toEntity(ruleDto);
+        Rule rule = mapper.ruleDtoToRule(ruleDto);
         Optional<Rule> existRule = repository.findByUrl(rule.getUrl());
-        existRule.orElseThrow(() -> new RuleYetExistsException(String.format("Правило с url = %s уже существует", rule.getUrl())));
+        existRule.orElseThrow(
+                () -> new RuleYetExistsException(String.format("Правило с url = %s уже существует", rule.getUrl())));
         Rule SavedRule = repository.save(rule);
-        return mapper.toDTO(SavedRule);
+        return mapper.ruleToRuleDto(SavedRule);
     }
 
     @Transactional
     @Override
-    public Rule updateRule(Long ruleId, Rule rule) {
-//        Rule oldRule = repository.findById(ruleId).orElseThrow(
-//                () -> new RuleNotFoundException(String.format("Правило с идентификатором %d ", ruleId)));
-
-        Rule oldRule = repository.getById(ruleId);
-        rule.setId(oldRule.getId());
-        return repository.save(rule);
-    }
-
-    @Transactional
-    @Override
-    public Rule updateRule(Long ruleId, RuleDTO ruleDTO) throws RuleNotFoundException {
-        var entityWithoutId = mapper.toEntity(ruleDTO);
-        entityWithoutId.setId(ruleId);
-        return repository.save(entityWithoutId);
+    public RuleDTO updateRule(Long ruleId, RuleDTO ruleDTO) throws RuleNotFoundException {
+        Rule existRule = repository.getById(ruleId);
+        existRule.setIsActivated(ruleDTO.getIsActivated());
+        existRule.setUrl(ruleDTO.getUrl());
+        existRule.setPeriodInSeconds(ruleDTO.getPeriodInSeconds());
+        existRule.setExpectedStatusCode(ruleDTO.getExpectedStatusCode());
+        Rule savedRule = repository.save(existRule);
+        return mapper.ruleToRuleDto(savedRule);
+//        var rule = mapper.ruleDtoToRule(ruleDTO);
+//        rule.setId(ruleId);
+//        return repository.save(rule);
     }
 
     @Override
-    public Rule readRule(long ruleId) throws RuleNotFoundException {
+    public RuleDTO readRule(Long ruleId) throws RuleNotFoundException {
 //        return repository.findById(ruleId).orElseThrow(
 //                () -> new RuleNotFoundException(String.format("Правило с идентификатором %d ", ruleId))
 //        );
-        return repository.getById(ruleId);
+        Rule foundRule = repository.getById(ruleId);
+        return mapper.ruleToRuleDto(foundRule);
     }
 
     @Override
-    public void deleteRule(long ruleId) {
+    public void deleteRule(Long ruleId) {
         repository.deleteById(ruleId);
     }
 
-    @Transactional
     @Override
-    public void enableRule(long ruleId) throws RuleNotFoundException {
-        Rule rule = readRule(ruleId);
-        rule.setEnabled(true);
-        repository.save(rule);
+    public RuleDTO changeActivation(Long ruleId, Boolean isActivated) {
+        Rule existRule = repository.getById(ruleId);
+        existRule.setIsActivated(isActivated);
+        Rule savedRule = repository.save(existRule);
+        return mapper.ruleToRuleDto(savedRule);
     }
 
-    @Transactional
     @Override
-    public void disableRule(long ruleId) throws RuleNotFoundException {
-        Rule rule = readRule(ruleId);
-        rule.setEnabled(false);
-        repository.save(rule);
+    public List<RuleDTO> getAllRules() {
+        List<Rule> rules = repository.findAll();
+        return mapper.ruleListToRuleDtoList(rules);
     }
 }

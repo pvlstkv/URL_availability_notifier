@@ -5,13 +5,14 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 public class RuleDTO {
+    private Long id;
 
     private String url;
 
     private Long periodInSeconds;
 
-    private Short expectedStatusCode;
+    private Integer expectedStatusCode;
 
-    private Boolean isEnabled;
+    private Boolean isActivated;
 
 }

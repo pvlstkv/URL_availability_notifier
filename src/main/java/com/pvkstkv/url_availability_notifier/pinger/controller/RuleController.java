@@ -1,7 +1,6 @@
 package com.pvkstkv.url_availability_notifier.pinger.controller;
 
 import com.pvkstkv.url_availability_notifier.pinger.dto.RuleDTO;
-import com.pvkstkv.url_availability_notifier.pinger.mapper.RuleMapper;
 import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
 import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleNotFoundException;
 import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleYetExistsException;
@@ -10,19 +9,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/rule")
 @AllArgsConstructor
 public class RuleController {
+
     private RuleUseCases ruleUsecases;
-
-
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public RuleDTO create(@RequestBody RuleDTO ruleDTO) throws RuleYetExistsException {
         return ruleUsecases.createRule(ruleDTO);
     }
-
 
     @PutMapping("/{id}")
     public RuleDTO update(@PathVariable Long id, @RequestBody RuleDTO ruleDTO) throws RuleNotFoundException {
@@ -32,8 +31,12 @@ public class RuleController {
 
     @GetMapping("/{id}")
     public RuleDTO getRule(@PathVariable Long id) throws RuleNotFoundException {
-        var r = ruleUsecases.readRule(id);
-        return new RuleDTO(r.getUrl(), r.getPeriodInSeconds(), r.getExpectedStatusCode(), r.isEnabled());
+        return ruleUsecases.readRule(id);
+    }
+
+    @GetMapping("/all")
+    public List<RuleDTO> getAllRules(){
+        return ruleUsecases.getAllRules();
     }
 
     @DeleteMapping("{id}")
@@ -41,6 +44,13 @@ public class RuleController {
     public void delete(@PathVariable Long id) {
         ruleUsecases.deleteRule(id);
     }
+
+//    @PutMapping({"/activating"})
+//    public RuleDTO changeActivating(@RequestParam Boolean isActivated){
+//        return ruleUsecases.changeActivation()
+//    }
+
+
 
     @GetMapping
     public String hello() {
