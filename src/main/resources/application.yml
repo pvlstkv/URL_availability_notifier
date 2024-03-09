@@ -17,6 +17,10 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: validate
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 #  h2:
 #    console.enabled: true
 
