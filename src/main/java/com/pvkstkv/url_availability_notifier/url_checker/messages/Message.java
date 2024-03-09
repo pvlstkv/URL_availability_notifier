@@ -25,4 +25,12 @@ public class Message {
         this.receivedStatusCode = receivedStatusCode;
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "rule=" + rule +
+                ", state=" + state +
+                ", receivedStatusCode=" + receivedStatusCode +
+                '}';
+    }
 }

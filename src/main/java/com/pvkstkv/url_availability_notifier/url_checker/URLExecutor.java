@@ -29,7 +29,7 @@ public class URLExecutor implements Runnable {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             int responseCode = connection.getResponseCode();
             Message message;
-            if (responseCode != rule.getExpectedStatusCode()) {
+            if (responseCode == rule.getExpectedStatusCode()) {
 //                message = new MatchMessage(rule, responseCode);
                 message = new Message(rule, State.MATCH, responseCode);
             } else {

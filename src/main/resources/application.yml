@@ -17,9 +17,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
 #  h2:
 #    console.enabled: true
 
 bot:
-  token:
+  token: # put your token here
