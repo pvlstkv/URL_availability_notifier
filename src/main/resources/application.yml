@@ -1,12 +1,25 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:myh2db
-    username: login
-    password: password
-    driverClassName: org.h2.Driver
+#    url: jdbc:h2:mem:myh2db
+#    username: login
+#    password: password
+#    driverClassName: org.h2.Driver
+#    generate-unique-name: false
+#    name: myh2db
+
+    url: jdbc:postgresql://localhost:5432/url_notifier
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
     generate-unique-name: false
-    name: myh2db
+    name: url_notifier
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console.enabled: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    hibernate:
+      ddl-auto: create-drop
+#  h2:
+#    console.enabled: true
+
+bot:
+  token:
