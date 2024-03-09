@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class URLChecker implements ApplicationRunner {
 
     private final RuleRepository repository;
     private final Retransmittable tgBot;
+    @Value("${thredpoolsize}")
+    private int threadPoolSize;
 
     public void start() {
         log.info("ULChecker started");
@@ -32,7 +35,6 @@ public class URLChecker implements ApplicationRunner {
         // as property value, but now is const
         int queueSize = 100;
         BlockingQueue<Message> messages = new LinkedBlockingQueue<>(queueSize);
-        int threadPoolSize = 8;
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(threadPoolSize);
         ses.submit(new MessageTransponder(messages, tgBot));
         rules.forEach(rule -> {
