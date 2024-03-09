@@ -1,5 +1,7 @@
 package com.pvkstkv.url_availability_notifier.message_sender;
 
+import com.pvkstkv.url_availability_notifier.message_sender.tg_chat.TgChatId;
+import com.pvkstkv.url_availability_notifier.message_sender.tg_chat.TgChatIdUseCases;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,22 +10,26 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class MyTelegramBot extends TelegramLongPollingBot implements Retransmittable {
+public class URLNotifierTelegramBot extends TelegramLongPollingBot implements Retransmittable {
 
-    private final Set<Long> subscribers = new HashSet<>();
-
+    private final Set<String> tgSubscriberIds = new CopyOnWriteArraySet<>();
     private static final String START = "/start";
     private static final String SUBSCRIBE = "/subscribe";
     private static final String UNSUBSCRIBE = "/unsubscribe";
     private static final String HELP = "/help";
+    private final TgChatIdUseCases tgChatIdUseCases;
 
-    public MyTelegramBot(@Value("${bot.token}") String botToken) {
+    public URLNotifierTelegramBot(@Value("${bot.token}") String botToken, TgChatIdUseCases tgUserUseCases) {
         super(botToken);
+        this.tgChatIdUseCases = tgUserUseCases;
+        var allTgChats = tgUserUseCases.getAllSubscribers().stream().map(TgChatId::getId).toList();
+        this.tgSubscriberIds.addAll(allTgChats);
     }
 
     @Override
@@ -31,27 +37,32 @@ public class MyTelegramBot extends TelegramLongPollingBot implements Retransmitt
         if (!update.hasMessage() || !update.getMessage().hasText()) {
             return;
         }
-        Long chatId = update.getMessage().getChatId();
+        String chatId = String.valueOf(update.getMessage().getChatId());
         String message = update.getMessage().getText();
         switch (message) {
-            case START -> {
-                String userName = update.getMessage().getChat().getUserName();
-                startCommand(chatId, userName);
-            }
+            case START -> startCommand(chatId, update);
             case HELP -> helpCommand(chatId);
-            case SUBSCRIBE -> {
-                subscribers.add(chatId);
-                sendMessagePerUser(chatId, "Вы подписаны на URL проверки");
-            }
-            case UNSUBSCRIBE -> {
-                subscribers.remove(chatId);
-                sendMessagePerUser(chatId, "Вы отписаны от URL проверок");
-            }
+            case SUBSCRIBE -> subscribeCommand(chatId);
+            case UNSUBSCRIBE -> unsubscribeCommand(chatId);
             default -> unknownCommand(chatId);
         }
     }
 
-    private void startCommand(Long chatId, String userName) {
+    private void subscribeCommand(String chatId) {
+        log.info(String.format("user chat id is %s", chatId));
+        tgSubscriberIds.add(chatId);
+        tgChatIdUseCases.saveSubscriber(chatId);
+        sendMessagePerUser(chatId, "Вы подписаны на URL проверки");
+    }
+
+    private void unsubscribeCommand(String chatId) {
+        tgSubscriberIds.remove(chatId);
+        tgChatIdUseCases.deleteSubscriber(chatId);
+        sendMessagePerUser(chatId, "Вы отписаны от URL проверок");
+    }
+
+    private void startCommand(String chatId, Update update) {
+        String userName = update.getMessage().getChat().getUserName();
         var text = String.format("""
                 Добро пожаловать в бот, %s!
 
@@ -66,7 +77,7 @@ public class MyTelegramBot extends TelegramLongPollingBot implements Retransmitt
         sendMessagePerUser(chatId, text);
     }
 
-    private void helpCommand(Long chatId) {
+    private void helpCommand(String chatId) {
         var text = String.format("""
                 Справочная информация по боту
 
@@ -77,19 +88,18 @@ public class MyTelegramBot extends TelegramLongPollingBot implements Retransmitt
         sendMessagePerUser(chatId, text);
     }
 
-    private void unknownCommand(Long chatId) {
+    private void unknownCommand(String chatId) {
         var text = "Не удалось распознать команду!";
         sendMessagePerUser(chatId, text);
     }
 
     @Override
     public String getBotUsername() {
-        // Return your bot's username
         return "url_notifier";
     }
 
-    private void sendMessagePerUser(Long chatId, String messageText) {
-        log.info(String.format("user with id = %d: %s", chatId, messageText));
+    private void sendMessagePerUser(String chatId, String messageText) {
+        log.info(String.format("user chat id = %s: %s", chatId, messageText));
         SendMessage message = new SendMessage(String.valueOf(chatId), messageText);
         try {
             execute(message);
@@ -99,13 +109,13 @@ public class MyTelegramBot extends TelegramLongPollingBot implements Retransmitt
     }
 
     public void retransmit(String text) {
-        subscribers.forEach(subscriber -> sendMessagePerUser(subscriber, text));
+        tgSubscriberIds.forEach(subscriber -> sendMessagePerUser(subscriber, text));
     }
 
     @Override
     public String toString() {
         return "MyTelegramBot{" +
-                "subscribers=" + subscribers +
+                "subscribers=" + tgSubscriberIds +
                 '}';
     }
 }
