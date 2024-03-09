@@ -7,12 +7,11 @@ spring:
 #    generate-unique-name: false
 #    name: myh2db
 
-    url: jdbc:postgresql://localhost:5432/url_notifier
-    username: postgres
-    password: postgres
+    url: ${DB_URL}
+    username: ${DB_LOGIN}
+    password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     generate-unique-name: false
-    name: url_notifier
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
@@ -22,4 +21,6 @@ spring:
 #    console.enabled: true
 
 bot:
-  token: # put your token here
+  token: ${BOT_TOKEN} # put your token here
+
+thredpoolsize: ${THREADPOOLSIZE}
