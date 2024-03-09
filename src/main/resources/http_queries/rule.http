@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/rule/create
+POST http://localhost:8080/api/rule
 Content-Type: application/json
 
 {

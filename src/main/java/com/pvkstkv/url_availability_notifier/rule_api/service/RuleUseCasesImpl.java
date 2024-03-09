@@ -25,9 +25,13 @@ public class RuleUseCasesImpl implements RuleUseCases {
     @Override
     public RuleDTO createRule(RuleDTO ruleDto) throws RuleYetExistsException {
         Rule rule = mapper.ruleDtoToRule(ruleDto);
+        if (rule.getIsActivated() == null){
+            rule.setIsActivated(true);
+        }
         Optional<Rule> existRule = repository.findByUrl(rule.getUrl());
-        existRule.orElseThrow(
-                () -> new RuleYetExistsException(String.format("Правило с url = %s уже существует", rule.getUrl())));
+        if (existRule.isPresent()) {
+            throw new RuleYetExistsException(String.format("Правило с url = %s уже существует", rule.getUrl()));
+        }
         Rule SavedRule = repository.save(rule);
         return mapper.ruleToRuleDto(SavedRule);
     }
