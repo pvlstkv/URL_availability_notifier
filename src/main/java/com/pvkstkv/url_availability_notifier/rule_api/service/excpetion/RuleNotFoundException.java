@@ -1,4 +1,4 @@
-package com.pvkstkv.url_availability_notifier.pinger.service.excpetion;
+package com.pvkstkv.url_availability_notifier.rule_api.service.excpetion;
 
 public class RuleNotFoundException extends Throwable {
     public RuleNotFoundException() {

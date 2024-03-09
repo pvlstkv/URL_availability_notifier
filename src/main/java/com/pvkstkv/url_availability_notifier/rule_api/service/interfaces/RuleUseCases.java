@@ -1,9 +1,8 @@
-package com.pvkstkv.url_availability_notifier.pinger.service.inerface;
+package com.pvkstkv.url_availability_notifier.rule_api.service.interfaces;
 
-import com.pvkstkv.url_availability_notifier.pinger.dto.RuleDTO;
-import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleNotFoundException;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleYetExistsException;
+import com.pvkstkv.url_availability_notifier.rule_api.dto.RuleDTO;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleNotFoundException;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleYetExistsException;
 
 import java.util.List;
 

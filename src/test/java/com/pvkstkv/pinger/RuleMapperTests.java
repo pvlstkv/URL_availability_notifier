@@ -1,9 +1,9 @@
 package com.pvkstkv.pinger;
 
 import com.pvkstkv.url_availability_notifier.UrlAvailabilityNotifierApplication;
-import com.pvkstkv.url_availability_notifier.pinger.dto.RuleDTO;
-import com.pvkstkv.url_availability_notifier.pinger.mapper.RuleMapper;
-import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
+import com.pvkstkv.url_availability_notifier.rule_api.dto.RuleDTO;
+import com.pvkstkv.url_availability_notifier.rule_api.mapper.RuleMapper;
+import com.pvkstkv.url_availability_notifier.rule_api.model.Rule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

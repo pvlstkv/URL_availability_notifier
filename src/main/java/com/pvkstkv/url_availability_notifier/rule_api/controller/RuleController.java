@@ -1,10 +1,9 @@
-package com.pvkstkv.url_availability_notifier.pinger.controller;
+package com.pvkstkv.url_availability_notifier.rule_api.controller;
 
-import com.pvkstkv.url_availability_notifier.pinger.dto.RuleDTO;
-import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleNotFoundException;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleYetExistsException;
-import com.pvkstkv.url_availability_notifier.pinger.service.inerface.RuleUseCases;
+import com.pvkstkv.url_availability_notifier.rule_api.dto.RuleDTO;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleNotFoundException;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleYetExistsException;
+import com.pvkstkv.url_availability_notifier.rule_api.service.interfaces.RuleUseCases;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

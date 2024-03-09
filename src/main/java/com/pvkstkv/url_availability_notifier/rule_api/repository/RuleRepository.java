@@ -1,16 +1,18 @@
-package com.pvkstkv.url_availability_notifier.pinger.repository;
+package com.pvkstkv.url_availability_notifier.rule_api.repository;
 
-import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleNotFoundException;
+import com.pvkstkv.url_availability_notifier.rule_api.model.Rule;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleNotFoundException;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RuleRepository extends JpaRepository<Rule, Long> {
     Optional<Rule> findByUrl(String url);
+
+    List<Rule> findAllByIsActivated(Boolean isActivated);
 
     @SneakyThrows
     default @NonNull Rule getById(@NonNull Long id) {

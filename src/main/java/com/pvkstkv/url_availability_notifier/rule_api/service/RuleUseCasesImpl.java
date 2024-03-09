@@ -1,12 +1,12 @@
-package com.pvkstkv.url_availability_notifier.pinger.service;
+package com.pvkstkv.url_availability_notifier.rule_api.service;
 
-import com.pvkstkv.url_availability_notifier.pinger.dto.RuleDTO;
-import com.pvkstkv.url_availability_notifier.pinger.mapper.RuleMapper;
-import com.pvkstkv.url_availability_notifier.pinger.model.Rule;
-import com.pvkstkv.url_availability_notifier.pinger.repository.RuleRepository;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleNotFoundException;
-import com.pvkstkv.url_availability_notifier.pinger.service.excpetion.RuleYetExistsException;
-import com.pvkstkv.url_availability_notifier.pinger.service.inerface.RuleUseCases;
+import com.pvkstkv.url_availability_notifier.rule_api.dto.RuleDTO;
+import com.pvkstkv.url_availability_notifier.rule_api.mapper.RuleMapper;
+import com.pvkstkv.url_availability_notifier.rule_api.model.Rule;
+import com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleNotFoundException;
+import com.pvkstkv.url_availability_notifier.rule_api.service.excpetion.RuleYetExistsException;
+import com.pvkstkv.url_availability_notifier.rule_api.service.interfaces.RuleUseCases;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

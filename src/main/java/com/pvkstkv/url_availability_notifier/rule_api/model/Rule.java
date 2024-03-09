@@ -1,4 +1,4 @@
-package com.pvkstkv.url_availability_notifier.pinger.model;
+package com.pvkstkv.url_availability_notifier.rule_api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

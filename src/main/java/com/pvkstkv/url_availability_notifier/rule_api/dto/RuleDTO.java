@@ -1,4 +1,4 @@
-package com.pvkstkv.url_availability_notifier.pinger.dto;
+package com.pvkstkv.url_availability_notifier.rule_api.dto;
 
 import lombok.*;
 
