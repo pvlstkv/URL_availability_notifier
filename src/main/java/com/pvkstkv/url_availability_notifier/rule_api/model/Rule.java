@@ -43,4 +43,14 @@ public class Rule {
     public int hashCode() {
         return Objects.hash(id, url, periodInSeconds, expectedStatusCode, isActivated);
     }
+
+    @Override
+    public String toString() {
+        return "Правило{" +
+                ", url='" + url + '\'' +
+                ", период проверки в секундах=" + periodInSeconds +
+                ", ожидаемый статус код=" + expectedStatusCode +
+                ", активен=" + isActivated +
+                '}';
+    }
 }

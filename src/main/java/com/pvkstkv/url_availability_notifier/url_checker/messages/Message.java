@@ -5,7 +5,6 @@ import com.pvkstkv.url_availability_notifier.url_checker.State;
 
 public class Message {
     protected Rule rule;
-
     protected State state;
     protected Integer receivedStatusCode;
 
@@ -27,10 +26,10 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "rule=" + rule +
-                ", state=" + state +
-                ", receivedStatusCode=" + receivedStatusCode +
+        return "Сообщение{" +
+                "по правилу=" + rule +
+                ", состояние URL=" + state +
+                ", полученный статус код=" + receivedStatusCode +
                 '}';
     }
 }
