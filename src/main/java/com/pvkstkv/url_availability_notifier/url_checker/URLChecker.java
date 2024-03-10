@@ -24,6 +24,9 @@ public class URLChecker implements ApplicationRunner {
 
     private final RuleRepository repository;
     private final Retransmittable tgBot;
+    private ScheduledExecutorService ses;
+    private BlockingQueue<Message> messages;
+
     @Value("${thredpoolsize}")
     private int threadPoolSize;
 
@@ -34,8 +37,8 @@ public class URLChecker implements ApplicationRunner {
         List<Rule> rules = repository.findAllByIsActivated(isActivated);
         // as property value, but now is const
         int queueSize = 100;
-        BlockingQueue<Message> messages = new LinkedBlockingQueue<>(queueSize);
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(threadPoolSize);
+        messages = new LinkedBlockingQueue<>(queueSize);
+        ses = Executors.newScheduledThreadPool(threadPoolSize);
         ses.submit(new MessageTransponder(messages, tgBot));
         rules.forEach(rule -> {
             ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
@@ -46,5 +49,12 @@ public class URLChecker implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         start();
+    }
+
+    public void add(Rule rule) {
+        if (rule.getIsActivated()) {
+            ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
+            log.warn("ACHTUNG start a new rule");
+        }
     }
 }
