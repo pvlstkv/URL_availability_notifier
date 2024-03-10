@@ -1,12 +1,5 @@
 spring:
   datasource:
-#    url: jdbc:h2:mem:myh2db
-#    username: login
-#    password: password
-#    driverClassName: org.h2.Driver
-#    generate-unique-name: false
-#    name: myh2db
-
     url: ${DB_URL}
     username: ${DB_LOGIN}
     password: ${DB_PASSWORD}
@@ -16,21 +9,15 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     database: postgresql
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     defer-datasource-initialization: true
   sql:
     init:
       mode: always
-#  h2:
-#    console.enabled: true
-
 bot:
   token: ${BOT_TOKEN} # put your token here
 
 thredpoolsize: ${THREADPOOLSIZE}
 
-#jwtSecret: veryshortsecret #$${JWT_SECRET}
-#jwtExpiration: 1_000_000_000
-
 jwtSecret: VeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKey
-jwtExpirationMs: 86400000 # 24hours * 1000
+jwtExpirationMs: 86400 # 24hours
