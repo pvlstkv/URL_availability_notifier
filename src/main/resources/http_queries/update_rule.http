@@ -1,0 +1,10 @@
+PUT http://localhost:8080/api/rule/129
+Content-Type: application/json
+
+{
+  "url": "https://madbrains.ru/",
+  "periodInSeconds": 10,
+  "expectedStatusCode": 200,
+  "isActivated": true
+}
+
