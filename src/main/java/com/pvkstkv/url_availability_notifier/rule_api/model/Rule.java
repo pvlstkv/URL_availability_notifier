@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,5 +29,18 @@ public class Rule {
         this.periodInSeconds = periodInSeconds;
         this.expectedStatusCode = expectedStatusCode;
         this.isActivated = isActivated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rule rule = (Rule) o;
+        return Objects.equals(id, rule.id) && Objects.equals(url, rule.url) && Objects.equals(periodInSeconds, rule.periodInSeconds) && Objects.equals(expectedStatusCode, rule.expectedStatusCode) && Objects.equals(isActivated, rule.isActivated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url, periodInSeconds, expectedStatusCode, isActivated);
     }
 }
