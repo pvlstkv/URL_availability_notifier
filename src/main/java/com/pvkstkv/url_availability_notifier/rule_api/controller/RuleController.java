@@ -24,8 +24,7 @@ public class RuleController {
 
     @PutMapping("/{id}")
     public RuleDTO update(@PathVariable Long id, @RequestBody RuleDTO ruleDTO) throws RuleNotFoundException {
-//        ruleUsecases.updateRule(id, mapper.toEntity(ruleDTO));
-        return ruleDTO;
+        return ruleUsecases.updateRule(id, ruleDTO);
     }
 
     @GetMapping("/{id}")
@@ -43,13 +42,6 @@ public class RuleController {
     public void delete(@PathVariable Long id) {
         ruleUsecases.deleteRule(id);
     }
-
-//    @PutMapping({"/activating"})
-//    public RuleDTO changeActivating(@RequestParam Boolean isActivated){
-//        return ruleUsecases.changeActivation()
-//    }
-
-
 
     @GetMapping
     public String hello() {

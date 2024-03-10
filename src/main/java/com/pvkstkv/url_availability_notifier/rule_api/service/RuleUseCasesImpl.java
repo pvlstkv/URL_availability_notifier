@@ -25,7 +25,7 @@ public class RuleUseCasesImpl implements RuleUseCases {
     @Override
     public RuleDTO createRule(RuleDTO ruleDto) throws RuleYetExistsException {
         Rule rule = mapper.ruleDtoToRule(ruleDto);
-        if (rule.getIsActivated() == null){
+        if (rule.getIsActivated() == null) {
             rule.setIsActivated(true);
         }
         Optional<Rule> existRule = repository.findByUrl(rule.getUrl());
@@ -38,7 +38,7 @@ public class RuleUseCasesImpl implements RuleUseCases {
 
     @Transactional
     @Override
-    public RuleDTO updateRule(Long ruleId, RuleDTO ruleDTO) throws RuleNotFoundException {
+    public RuleDTO updateRule(Long ruleId, RuleDTO ruleDTO) {
         Rule existRule = repository.getById(ruleId);
         existRule.setIsActivated(ruleDTO.getIsActivated());
         existRule.setUrl(ruleDTO.getUrl());
@@ -46,16 +46,10 @@ public class RuleUseCasesImpl implements RuleUseCases {
         existRule.setExpectedStatusCode(ruleDTO.getExpectedStatusCode());
         Rule savedRule = repository.save(existRule);
         return mapper.ruleToRuleDto(savedRule);
-//        var rule = mapper.ruleDtoToRule(ruleDTO);
-//        rule.setId(ruleId);
-//        return repository.save(rule);
     }
 
     @Override
-    public RuleDTO readRule(Long ruleId) throws RuleNotFoundException {
-//        return repository.findById(ruleId).orElseThrow(
-//                () -> new RuleNotFoundException(String.format("Правило с идентификатором %d ", ruleId))
-//        );
+    public RuleDTO readRule(Long ruleId) {
         Rule foundRule = repository.getById(ruleId);
         return mapper.ruleToRuleDto(foundRule);
     }
