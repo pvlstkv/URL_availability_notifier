@@ -5,8 +5,6 @@ import com.pvkstkv.url_availability_notifier.rule_api.model.Rule;
 import com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository;
 import com.pvkstkv.url_availability_notifier.url_checker.messages.Message;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -27,6 +25,8 @@ public class URLChecker implements ApplicationRunner {
     private ScheduledExecutorService ses;
     private BlockingQueue<Message> messages;
 
+    private final ConcurrentMap<Long, Future<?>> ruleIdFutureMap = new ConcurrentHashMap<>();
+
     @Value("${thredpoolsize}")
     private int threadPoolSize;
 
@@ -41,7 +41,8 @@ public class URLChecker implements ApplicationRunner {
         ses = Executors.newScheduledThreadPool(threadPoolSize);
         ses.submit(new MessageTransponder(messages, tgBot));
         rules.forEach(rule -> {
-            ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
+            var future = ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
+            ruleIdFutureMap.put(rule.getId(), future);
         });
         log.info("All checkers started");
     }
@@ -52,9 +53,19 @@ public class URLChecker implements ApplicationRunner {
     }
 
     public void add(Rule rule) {
+        if (ruleIdFutureMap.containsKey(rule.getId())) {
+            remove(rule.getId());
+        }
         if (rule.getIsActivated()) {
-            ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
-            log.warn("ACHTUNG start a new rule");
+            var future = ses.scheduleWithFixedDelay(new URLExecutor(rule, messages), 0, rule.getPeriodInSeconds(), TimeUnit.SECONDS);
+            ruleIdFutureMap.put(rule.getId(), future);
+            log.warn("start monitoring a new rule: " + rule);
+        }
+    }
+
+    public void remove(Long ruleId) {
+        if (ruleIdFutureMap.containsKey(ruleId)) {
+            ruleIdFutureMap.get(ruleId).cancel(true);
         }
     }
 }

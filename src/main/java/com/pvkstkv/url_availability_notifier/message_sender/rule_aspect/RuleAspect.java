@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
@@ -22,17 +21,21 @@ public class RuleAspect {
 
     private final URLChecker urlChecker;
 
-    @Pointcut("execution(* com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository.save(..)) || " +
-            "execution(* com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository.deleteById())")
-    private void ruleOperation() {}
-
-    @After("ruleOperation()")
-//    @After("execution(* com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository.save(..))")
-    public void createNewRule(JoinPoint joinPoint) {
-        log.warn("INSIDE ASPECT");
+    @After("execution(* com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository.save(..))")
+    public void changeRuleState(JoinPoint joinPoint) {
         var rule = joinPoint.getArgs()[0];
-        if (rule instanceof Rule){
-            urlChecker.add((Rule)rule);
+        log.info("change rule state: " + rule);
+        if (rule instanceof Rule) {
+            urlChecker.add((Rule) rule);
+        }
+    }
+
+    @After("execution(* com.pvkstkv.url_availability_notifier.rule_api.repository.RuleRepository.deleteById(..))")
+    public void deleteRule(JoinPoint joinPoint) {
+        var ruleId = joinPoint.getArgs()[0];
+        log.info("delete ruleId: " + ruleId);
+        if (ruleId instanceof Long) {
+            urlChecker.remove((Long) ruleId);
         }
     }
 }
