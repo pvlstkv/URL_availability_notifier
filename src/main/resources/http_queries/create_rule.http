@@ -1,9 +1,0 @@
-POST http://localhost:8080/api/rule
-Content-Type: application/json
-
-{
-  "url": "https://google.ru/",
-  "periodInSeconds": 10,
-  "expectedStatusCode": 200
-}
-

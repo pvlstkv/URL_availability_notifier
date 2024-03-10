@@ -28,3 +28,9 @@ bot:
   token: ${BOT_TOKEN} # put your token here
 
 thredpoolsize: ${THREADPOOLSIZE}
+
+#jwtSecret: veryshortsecret #$${JWT_SECRET}
+#jwtExpiration: 1_000_000_000
+
+jwtSecret: VeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKeyVeryLongSecretKey
+jwtExpirationMs: 86400000 # 24hours * 1000

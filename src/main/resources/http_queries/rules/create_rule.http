@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/rule
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyX2xvZ2luIiwicm9sZSI6IlVTRVIiLCJpZCI6MywiaWF0IjoxNzEwMDg0NDE2LCJleHAiOjE3MTA5NDg0MTZ9.tiykpTCn_PxiHuQemgaFmWrDXB29UJ49Kql3QQaVDgasSHIh28_0_okBnPsHH8f-hsIC6ZKX_7S4lqWG5Hjj9g
+
+{
+  "url": "https://google.ru/",
+  "periodInSeconds": 10,
+  "expectedStatusCode": 200
+}
+
+
+
+
+
+
+
+

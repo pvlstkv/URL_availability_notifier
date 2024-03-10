@@ -1,0 +1,31 @@
+### reate e new rule
+POST http://localhost:8080/api/rule
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyX2xvZ2luIiwicm9sZSI6IlVTRVIiLCJpZCI6MywiaWF0IjoxNzEwMDg0NDE2LCJleHAiOjE3MTA5NDg0MTZ9.tiykpTCn_PxiHuQemgaFmWrDXB29UJ49Kql3QQaVDgasSHIh28_0_okBnPsHH8f-hsIC6ZKX_7S4lqWG5Hjj9g
+
+{
+  "url": "https://google.ru/",
+  "periodInSeconds": 10,
+  "expectedStatusCode": 200
+}
+
+### get existing rule by {id} or all
+GET localhost:8080/api/rule/all
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyX2xvZ2luIiwicm9sZSI6IlVTRVIiLCJpZCI6MywiaWF0IjoxNzEwMDg0NDE2LCJleHAiOjE3MTA5NDg0MTZ9.tiykpTCn_PxiHuQemgaFmWrDXB29UJ49Kql3QQaVDgasSHIh28_0_okBnPsHH8f-hsIC6ZKX_7S4lqWG5Hjj9g
+
+
+### update an existing rule by {id}
+PUT http://localhost:8080/api/rule/60
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyX2xvZ2luIiwicm9sZSI6IlVTRVIiLCJpZCI6MywiaWF0IjoxNzEwMDg0NDE2LCJleHAiOjE3MTA5NDg0MTZ9.tiykpTCn_PxiHuQemgaFmWrDXB29UJ49Kql3QQaVDgasSHIh28_0_okBnPsHH8f-hsIC6ZKX_7S4lqWG5Hjj9g
+
+{
+  "url": "https://madbrains.ru/",
+  "periodInSeconds": 10,
+  "expectedStatusCode": 200,
+  "isActivated": true
+}
+### delete existing rule
+DELETE http://localhost:8080/api/rule/59
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyX2xvZ2luIiwicm9sZSI6IlVTRVIiLCJpZCI6MywiaWF0IjoxNzEwMDg0NDE2LCJleHAiOjE3MTA5NDg0MTZ9.tiykpTCn_PxiHuQemgaFmWrDXB29UJ49Kql3QQaVDgasSHIh28_0_okBnPsHH8f-hsIC6ZKX_7S4lqWG5Hjj9g
+
